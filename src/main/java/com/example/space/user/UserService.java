@@ -19,15 +19,15 @@ public class UserService {
     private PasswordEncoder bcrypt;
 
 
-    private User getById(long id){
+    public User getById(long id){
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User con id " + id + " non trovato in db."));
     }
 
-    private List<User> findByEmail(String email){
+    public List<User> findByEmail(String email){
         return userRepository.findByEmail(email);
     }
 
-    private User putById(long id, UserRegistrationDTO userRegistrationDTO){
+    public User putById(long id, UserRegistrationDTO userRegistrationDTO){
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User con id " + id + " non trovato in db."));
         user.setEmail(userRegistrationDTO.email());
         user.setEta(userRegistrationDTO.eta());
@@ -38,7 +38,7 @@ public class UserService {
     }
 
 
-    private boolean changePassword(long id,String oldPass, String newPass){
+    public boolean changePassword(long id,String oldPass, String newPass){
        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User con id " + id + " non trovato in db."));
         if(bcrypt.matches(oldPass, user.getPassword()))  {
             user.setPassword(newPass);
@@ -48,7 +48,7 @@ public class UserService {
         }
     }
 
-    private boolean deleteById(long id){
+    public boolean deleteById(long id){
         try {
             userRepository.deleteById(id);
             return true;
@@ -57,9 +57,9 @@ public class UserService {
         }
     }
 
-    private List<User> getAll(){
+    public List<User> getAll(){
         return userRepository.findAll();
-    }g
+    }
 
 
 }
