@@ -48,4 +48,18 @@ public class UserService {
         }
     }
 
+    private boolean deleteById(long id){
+        try {
+            userRepository.deleteById(id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    private List<User> getAll(){
+        return userRepository.findAll();
+    }g
+
+
 }
