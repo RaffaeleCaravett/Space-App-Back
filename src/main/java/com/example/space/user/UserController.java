@@ -20,7 +20,7 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("HasAnyAuthority('USER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     public User getById(@PathVariable long id){
         return userService.getById(id);
     }
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("HasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public User putById(@PathVariable long id, @RequestBody @Validated UserRegistrationDTO userRegistrationDTO , BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
@@ -38,7 +38,7 @@ public class UserController {
         return userService.putById(id,userRegistrationDTO);
     }
     @PutMapping("/me")
-    @PreAuthorize("HasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public User putMeById(@AuthenticationPrincipal User currentUser, @RequestBody @Validated UserRegistrationDTO userRegistrationDTO , BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
@@ -47,23 +47,23 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    @PreAuthorize("HasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public boolean deleteMeById(@AuthenticationPrincipal User user){
         return userService.deleteById(user.getId());
     }
     @DeleteMapping("/{id}")
-    @PreAuthorize("HasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean deleteById(@PathVariable long id){
         return userService.deleteById(id);
     }
 
     @GetMapping("/email/{email}")
-    @PreAuthorize("HasAnyAuthority('USER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
   public List<User> findByEmail(@PathVariable String email){
         return userService.findByEmail(email);
     }
     @PutMapping("/password/me")
-    @PreAuthorize("HasAnyAuthority('USER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     public boolean findByEmail(@AuthenticationPrincipal User user,@RequestBody Passwords passwords){
         return userService.changePassword(user.getId(),passwords.oldPass(),passwords.newPass());
     }
