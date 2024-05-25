@@ -1,6 +1,7 @@
 package com.example.space.user;
 
 import com.example.space.enums.Role;
+import com.example.space.prenotazioni.Prenotazione;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +25,8 @@ public class User implements UserDetails {
     private int eta;
     @Enumerated(EnumType.STRING)
     private Role role;
-
+    @OneToMany(mappedBy = "user")
+    private List<Prenotazione> prenotaziones;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.name()));
