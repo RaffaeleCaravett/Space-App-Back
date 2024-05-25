@@ -1,6 +1,7 @@
 package com.example.space.user;
 
 import com.example.space.exceptions.BadRequestException;
+import com.example.space.payloads.entities.Passwords;
 import com.example.space.payloads.entities.UserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,5 +56,17 @@ public class UserController {
     public boolean deleteById(@PathVariable long id){
         return userService.deleteById(id);
     }
+
+    @GetMapping("/email/{email}")
+    @PreAuthorize("HasAnyAuthority('USER','ADMIN')")
+  public List<User> findByEmail(@PathVariable String email){
+        return userService.findByEmail(email);
+    }
+    @PutMapping("/password/me")
+    @PreAuthorize("HasAnyAuthority('USER','ADMIN')")
+    public boolean findByEmail(@AuthenticationPrincipal User user,@RequestBody Passwords passwords){
+        return userService.changePassword(user.getId(),passwords.oldPass(),passwords.newPass());
+    }
+
 
 }
