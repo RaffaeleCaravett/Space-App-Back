@@ -1,5 +1,6 @@
 package com.example.space.prenotazioni;
 
+import com.example.space.pacchetti.Pacchetto;
 import com.example.space.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,10 +23,10 @@ public class Prenotazione {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToMany(mappedBy = "prenotazione_id")
+    @ManyToMany
     @JoinTable(name = "prenotazione_pacchetto",
             joinColumns = @JoinColumn(name = "prenotazione_id"),
             inverseJoinColumns = @JoinColumn(name = "pacchetto_id"))
 private List<Pacchetto> pacchettos;
-    
+
 }
