@@ -75,4 +75,12 @@ public List<Pacchetto> findByPianetaId(long id){
     return pacchettoRepository.findByPianeta_Id(id);
 }
 
+public List<Pacchetto> findByDates(LocalDate firstDate, LocalDate secondDate){
+    return pacchettoRepository.findByDaGreaterThanEqualAndALessThanEqual(firstDate,secondDate);
+}
+
+public List<Pacchetto> findByPrezoBetween(double prezzo1,double prezzo2){
+    return pacchettoRepository.findByPrezzoBetween(prezzo1,prezzo2);
+}
+
 }
