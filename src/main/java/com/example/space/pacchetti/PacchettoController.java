@@ -60,5 +60,9 @@ public class PacchettoController {
                                             @RequestParam int annoDue,@RequestParam int meseDue ,@RequestParam int giornoDue){
         return pacchettoService.findByDates(LocalDate.of(annoUno,meseUno,giornoUno),LocalDate.of(annoDue,meseDue,giornoDue));
     }
+    @GetMapping("/pianeta/{pianetaId}")
+    public List<Pacchetto> getByDateBetween(@PathVariable long pianetaId){
+        return pacchettoService.findByPianetaId(pianetaId);
+    }
 
 }
