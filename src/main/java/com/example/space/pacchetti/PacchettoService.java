@@ -41,8 +41,8 @@ public  Pacchetto getById(long id){
     return  pacchettoRepository.findById(id).orElseThrow(()->new BadRequestException("Pianeta con id + " + id + " non trovato in db."));
 }
 
-public List<Pianeta> getAll (){
-    return pianetiRepository.findAll();
+public List<Pacchetto> getAll (){
+    return pacchettoRepository.findAll();
 }
 
 public boolean deleteById(long id){
