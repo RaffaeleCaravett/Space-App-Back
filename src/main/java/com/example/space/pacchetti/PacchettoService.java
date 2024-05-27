@@ -38,7 +38,7 @@ pacchetto.setDa(LocalDate.of(pacchettoDTO.da().get(0),pacchettoDTO.da().get(1),p
 
 
 public  Pacchetto getById(long id){
-    return  pacchettoRepository.findById(id).orElseThrow(()->new BadRequestException("Pianeta con id + " + id + " non trovato in db."));
+    return  pacchettoRepository.findById(id).orElseThrow(()->new BadRequestException("Pacchetto con id + " + id + " non trovato in db."));
 }
 
 public List<Pacchetto> getAll (){
