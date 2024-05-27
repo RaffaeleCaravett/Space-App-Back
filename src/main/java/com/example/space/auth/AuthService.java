@@ -4,6 +4,7 @@ import com.example.space.enums.Role;
 import com.example.space.exceptions.BadRequestException;
 import com.example.space.exceptions.UnauthorizedException;
 import com.example.space.payloads.entities.Token;
+import com.example.space.payloads.entities.UserLoginDTO;
 import com.example.space.payloads.entities.UserRegistrationDTO;
 import com.example.space.security.JWTTools;
 import com.example.space.user.User;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class AuthService {
@@ -36,7 +38,13 @@ public class AuthService {
 
     public Token authenticateUser(UserLoginDTO body) throws Exception {
         // 1. Verifichiamo che l'email dell'utente sia nel db
-        User user = usersService.findByEmail(body.email());
+        List<User> users =usersService.findByEmail(body.email());
+        User user = new User();
+        if(users.size() == 1){
+            user = users.get(0);
+        }else{
+         throw new BadRequestException("User con email : " + body.email() + " non presente in db.");
+        }
         // 2. In caso affermativo, verifichiamo se la password corrisponde a quella trovata nel db
         if(bcrypt.matches(body.password(), user.getPassword()))  {
             // 3. Se le credenziali sono OK --> Genero un JWT e lo restituisco
