@@ -9,6 +9,10 @@ import com.example.space.pianeti.Pianeta;
 import com.example.space.user.User;
 import com.example.space.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -77,4 +81,10 @@ return prenotazioneRepository.save(prenotazione);
     public List<Prenotazione> findByDateAndUser(LocalDate date, long user_id){
         return prenotazioneRepository.findByCreatedAtAndUser_Id(date,user_id);
     }
+
+    public Page<Prenotazione> getAllPaginated(int page,int size, String orderBy){
+        Pageable pageable = PageRequest.of(page,size,Sort.by(orderBy));
+        return prenotazioneRepository.findAll(pageable);
+    }
+
 }
