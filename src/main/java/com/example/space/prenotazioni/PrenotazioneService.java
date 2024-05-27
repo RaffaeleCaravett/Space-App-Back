@@ -70,4 +70,11 @@ return prenotazioneRepository.save(prenotazione);
         return prenotazioneRepository.save(prenotazione);
     }
 
+    public List<Prenotazione> findByPacchettoId(long id){
+        return  prenotazioneRepository.findByPacchetto_Id(id);
+    }
+
+    public List<Prenotazione> findByDateAndUser(LocalDate date, long user_id){
+        return prenotazioneRepository.findByCreatedAtAndUser_Id(date,user_id);
+    }
 }
