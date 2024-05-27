@@ -1,6 +1,7 @@
 package com.example.space.security;
 
 import com.example.space.exceptions.UnauthorizedException;
+import com.example.space.payloads.entities.Token;
 import com.example.space.user.User;
 import com.example.space.user.UserRepository;
 import io.jsonwebtoken.Claims;
