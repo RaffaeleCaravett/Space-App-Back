@@ -16,7 +16,7 @@ import java.util.Date;
 @Component
 public class JWTTools {
     @Value("${spring.jwt.secret}")
-    private String secret;
+    String secret;
 
     @Autowired
     UserRepository userRepository;

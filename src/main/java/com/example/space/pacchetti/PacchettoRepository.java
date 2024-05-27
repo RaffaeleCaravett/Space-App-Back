@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface PacchettoRepository extends JpaRepository<Pacchetto,Long> {
-    List<Pacchetto> findByPianeta_Id(long id);
+    List<Pacchetto> findByPianetas_Id(long id);
 
     List<Pacchetto> findByPrezzoBetween(double first,double second);
 

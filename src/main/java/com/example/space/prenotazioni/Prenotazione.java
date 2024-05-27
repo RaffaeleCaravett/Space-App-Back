@@ -32,6 +32,6 @@ public class Prenotazione {
             joinColumns = @JoinColumn(name = "prenotazione_id"),
             inverseJoinColumns = @JoinColumn(name = "pacchetto_id"))
 private List<Pacchetto> pacchettos;
-    private LocalDate created_ad;
+    private LocalDate created;
 
 }

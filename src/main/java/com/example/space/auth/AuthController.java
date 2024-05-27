@@ -21,13 +21,10 @@ import java.io.IOException;
 @RequestMapping("/auth")
 public class AuthController {
     @Autowired
-    private AuthService authService;
+    AuthService authService;
 
     @Autowired
-    private JWTTools jwtTools;
-
-    @Autowired
-    private UserService utenteService;
+    JWTTools jwtTools;
 
 
 

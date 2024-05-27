@@ -24,16 +24,16 @@ import java.util.List;
 @Service
 public class AuthService {
     @Autowired
-    private UserService usersService;
+    UserService usersService;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
-    private JWTTools jwtTools;
+    JWTTools jwtTools;
 
     @Autowired
-    private PasswordEncoder bcrypt;
+    PasswordEncoder bcrypt;
 
 
     public Token authenticateUser(UserLoginDTO body) throws Exception {

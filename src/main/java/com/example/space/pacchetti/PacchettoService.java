@@ -72,7 +72,7 @@ public Pacchetto putById(long id,PacchettoDTO pacchettoDTO){
 }
 
 public List<Pacchetto> findByPianetaId(long id){
-    return pacchettoRepository.findByPianeta_Id(id);
+    return pacchettoRepository.findByPianetas_Id(id);
 }
 
 public List<Pacchetto> findByDates(LocalDate firstDate, LocalDate secondDate){

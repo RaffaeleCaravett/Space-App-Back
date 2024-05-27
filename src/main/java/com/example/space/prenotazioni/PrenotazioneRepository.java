@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface PrenotazioneRepository extends JpaRepository<Prenotazione,Long> {
-    List<Prenotazione> findByPacchetto_Id(long id);
+    List<Prenotazione> findByPacchettos_Id(long id);
 
-    List<Prenotazione> findByCreatedAtAndUser_Id(LocalDate createdAt,Long userId);
+    List<Prenotazione> findByCreatedAndUser_Id(LocalDate createdAt,Long userId);
 }

@@ -33,7 +33,7 @@ public class SecurityConfig {
     ExceptionsHandlerFilter exceptionsHandlerFilter;
 
     @Value("#{'${cors.allowed-origins}'.split(',')}")
-    private List<String> allowedOrigins;
+    List<String> allowedOrigins;
 
 
     @Bean

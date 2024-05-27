@@ -16,7 +16,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    private PasswordEncoder bcrypt;
+    PasswordEncoder bcrypt;
 
 
     public User getById(long id){

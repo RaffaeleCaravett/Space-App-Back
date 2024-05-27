@@ -38,7 +38,7 @@ for(Long l : prenotazioneDTO.pacchetto_id()){
 }
 
 prenotazione.setPacchettos(pacchettos);
-prenotazione.setCreated_ad(LocalDate.now());
+prenotazione.setCreated(LocalDate.now());
 return prenotazioneRepository.save(prenotazione);
     }
 
@@ -70,16 +70,16 @@ return prenotazioneRepository.save(prenotazione);
         }
 
         prenotazione.setPacchettos(pacchettos);
-        prenotazione.setCreated_ad(LocalDate.now());
+        prenotazione.setCreated(LocalDate.now());
         return prenotazioneRepository.save(prenotazione);
     }
 
     public List<Prenotazione> findByPacchettoId(long id){
-        return  prenotazioneRepository.findByPacchetto_Id(id);
+        return  prenotazioneRepository.findByPacchettos_Id(id);
     }
 
     public List<Prenotazione> findByDateAndUser(LocalDate date, long user_id){
-        return prenotazioneRepository.findByCreatedAtAndUser_Id(date,user_id);
+        return prenotazioneRepository.findByCreatedAndUser_Id(date,user_id);
     }
 
     public Page<Prenotazione> getAllPaginated(int page,int size, String orderBy){

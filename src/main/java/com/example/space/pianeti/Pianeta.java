@@ -2,6 +2,7 @@ package com.example.space.pianeti;
 
 import com.example.space.enums.Galassia;
 import com.example.space.pacchetti.Pacchetto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,5 +21,6 @@ private String nome;
 @Enumerated(EnumType.STRING)
 private Galassia galassia;
 @ManyToMany(mappedBy = "pianetas")
+        @JsonIgnore
     List<Pacchetto> pacchettos;
 }
