@@ -46,8 +46,8 @@ public List<Pianeta> getAll(){
     return pianetiRepository.findAll();
 }
 
-public Page<Pianeta> getAllPaginated() {
-    Pageable pageable = PageRequest.of(0,10, Sort.by("id"));
+public Page<Pianeta> getAllPaginated(int page) {
+    Pageable pageable = PageRequest.of(page,10, Sort.by("id"));
     return  pianetiRepository.findAll(pageable);
 }
 }

@@ -34,8 +34,8 @@ public class PianetaController {
         return pianetaService.getAll();
     }
     @GetMapping("/paginated")
-    public Page<Pianeta> getAllPaginated(){
-        return pianetaService.getAllPaginated();
+    public Page<Pianeta> getAllPaginated(@RequestParam (defaultValue = "0") int page){
+        return pianetaService.getAllPaginated(page);
     }
     @GetMapping("/{id}")
     public Pianeta getById (@PathVariable long id){
