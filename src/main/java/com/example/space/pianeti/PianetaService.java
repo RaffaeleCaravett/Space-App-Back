@@ -4,6 +4,10 @@ import com.example.space.enums.Galassia;
 import com.example.space.exceptions.NotFoundException;
 import com.example.space.payloads.entities.PianetaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,5 +46,8 @@ public List<Pianeta> getAll(){
     return pianetiRepository.findAll();
 }
 
-
+public Page<Pianeta> getAllPaginated() {
+    Pageable pageable = PageRequest.of(0,10, Sort.by("id"));
+    return  pianetiRepository.findAll(pageable);
+}
 }
