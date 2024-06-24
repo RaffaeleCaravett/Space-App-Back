@@ -13,10 +13,10 @@ public record PacchettoDTO(
         int posti,
 
         @NotNull(message="Data da vuota.")
-        List<Integer> da,
+        LocalDate da,
 
     @NotNull(message="Data a vuota.")
-        List<Integer> a,
+        LocalDate a,
         @NotNull(message = "Pianeta id vuoto.")
         List<Long> pianeta_id
 ) {

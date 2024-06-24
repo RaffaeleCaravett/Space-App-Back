@@ -13,4 +13,6 @@ public interface PacchettoRepository extends JpaRepository<Pacchetto,Long> {
     List<Pacchetto> findByPrezzoBetween(double first,double second);
 
     List<Pacchetto> findByDaGreaterThanEqualAndALessThanEqual(LocalDate first, LocalDate second);
+
+    List<Pacchetto> findByPrezzoAndPostiAndDaAndAAndPianetas_Id(double prezzo, int posti,LocalDate da, LocalDate a, long pianeta_id);
 }

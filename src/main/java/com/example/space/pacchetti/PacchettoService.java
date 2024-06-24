@@ -21,19 +21,23 @@ public class PacchettoService {
 public Pacchetto save (PacchettoDTO pacchettoDTO){
     Pacchetto pacchetto = new Pacchetto();
 
-    pacchetto.setPosti(pacchettoDTO.posti());
-pacchetto.setPrezzo(pacchettoDTO.prezzo());
-pacchetto.setDa(LocalDate.of(pacchettoDTO.da().get(0),pacchettoDTO.da().get(1),pacchettoDTO.da().get(2)));
-    pacchetto.setA(LocalDate.of(pacchettoDTO.a().get(0),pacchettoDTO.a().get(1),pacchettoDTO.a().get(2)));
+    if(findByParameters(pacchettoDTO.prezzo(), pacchettoDTO.posti(), pacchettoDTO.da(),pacchettoDTO.a(),pacchettoDTO.pianeta_id().get(0))) {
+        pacchetto.setPosti(pacchettoDTO.posti());
+        pacchetto.setPrezzo(pacchettoDTO.prezzo());
+        pacchetto.setDa(pacchettoDTO.da());
+        pacchetto.setA(pacchettoDTO.a());
 
-    List<Pianeta> pianeti = new ArrayList<>();
-    for (Long l : pacchettoDTO.pianeta_id()) {
-        Pianeta pianeta = pianetiRepository.findById(l).orElseThrow(() -> new BadRequestException("Pianeta con id + " + l + " non trovato in db."));
-        pianeti.add(pianeta);
+        List<Pianeta> pianeti = new ArrayList<>();
+        for (Long l : pacchettoDTO.pianeta_id()) {
+            Pianeta pianeta = pianetiRepository.findById(l).orElseThrow(() -> new BadRequestException("Pianeta con id + " + l + " non trovato in db."));
+            pianeti.add(pianeta);
+        }
+
+        pacchetto.setPianetas(pianeti);
+        return pacchettoRepository.save(pacchetto);
+    }else{
+        throw new BadRequestException("Esiste già un pacchetto con le stesse caratteristiche.");
     }
-
-    pacchetto.setPianetas(pianeti);
-    return pacchettoRepository.save(pacchetto);
 }
 
 
@@ -58,8 +62,8 @@ public Pacchetto putById(long id,PacchettoDTO pacchettoDTO){
     Pacchetto pacchetto = pacchettoRepository.findById(id).orElseThrow(()-> new BadRequestException("Pacchetto con id + " + id + " non trovato in db."));
     pacchetto.setPosti(pacchettoDTO.posti());
     pacchetto.setPrezzo(pacchettoDTO.prezzo());
-    pacchetto.setDa(LocalDate.of(pacchettoDTO.da().get(0),pacchettoDTO.da().get(1),pacchettoDTO.da().get(2)));
-    pacchetto.setA(LocalDate.of(pacchettoDTO.a().get(0),pacchettoDTO.a().get(1),pacchettoDTO.a().get(2)));
+    pacchetto.setDa(pacchettoDTO.da());
+    pacchetto.setA(pacchettoDTO.a());
 
     List<Pianeta> pianeti = new ArrayList<>();
     for (Long l : pacchettoDTO.pianeta_id()) {
@@ -83,4 +87,13 @@ public List<Pacchetto> findByPrezoBetween(double prezzo1,double prezzo2){
     return pacchettoRepository.findByPrezzoBetween(prezzo1,prezzo2);
 }
 
+
+    public boolean findByParameters(double prezzo, int posti, LocalDate da, LocalDate a, long id){
+    List<Pacchetto> pacchetti = pacchettoRepository.findByPrezzoAndPostiAndDaAndAAndPianetas_Id(prezzo,posti,da,a,id);
+    if(pacchetti.isEmpty()){
+        return true;
+    }else{
+        return false;
+    }
+    }
 }
