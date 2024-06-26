@@ -3,13 +3,16 @@ package com.example.space.pacchetti;
 import com.example.space.exceptions.BadRequestException;
 import com.example.space.payloads.entities.PacchettoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/pacchetto")
@@ -63,5 +66,32 @@ public class PacchettoController {
     @GetMapping("/pianeta/{pianetaId}")
     public List<Pacchetto> getByDateBetween(@PathVariable long pianetaId){
         return pacchettoService.findByPianetaId(pianetaId);
+    }
+
+
+    @GetMapping("/byParametes")
+    public List<Pacchetto> getByParameters(@RequestParam(defaultValue = "0") long id, @RequestParam(defaultValue = "0") double prezzo, @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")LocalDate date1,
+                                           @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")LocalDate date2){
+
+        if(id!=0&&prezzo==0&& Objects.equals(date1, LocalDate.now()) && Objects.equals(date2, LocalDate.now())){
+            Pacchetto pacchetto = pacchettoService.getById(id);
+            List <Pacchetto> pacchettos = new ArrayList<>();
+            pacchettos.add(pacchetto);
+            return pacchettos;
+        }else if (id==0&&prezzo!=0&& Objects.equals(date1, LocalDate.now()) && Objects.equals(date2, LocalDate.now())){
+            return pacchettoService.findByPrezoBetween(0,prezzo);
+        }else if(id==0&&prezzo==0&& !Objects.equals(date1, LocalDate.now()) && !Objects.equals(date2, LocalDate.now())){
+            return pacchettoService.findByDates(date1,date2);
+        }else if(id!=0&&prezzo!=0&& Objects.equals(date1, LocalDate.now()) && Objects.equals(date2, LocalDate.now())){
+            return pacchettoService.getByIdAndPrezzo(id,prezzo);
+        }else if(id!=0&&prezzo!=0&& !Objects.equals(date1, LocalDate.now()) && !Objects.equals(date2, LocalDate.now())){
+            return pacchettoService.getByIdAndPrezzoAndDates(id,prezzo,date1,date2);
+        }else if(id==0&&prezzo!=0&& !Objects.equals(date1, LocalDate.now()) && !Objects.equals(date2, LocalDate.now())){
+            return pacchettoService.getByPrezzoAndDates(prezzo,date1,date2);
+        }else{
+            throw new BadRequestException("Qualcosa non va nell'elaborazione della richiesta.");
+        }
+
+
     }
 }

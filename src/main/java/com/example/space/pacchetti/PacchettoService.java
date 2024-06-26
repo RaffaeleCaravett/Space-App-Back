@@ -96,4 +96,14 @@ public List<Pacchetto> findByPrezoBetween(double prezzo1,double prezzo2){
         return false;
     }
     }
+    public  List<Pacchetto> getByIdAndPrezzo(long id,double prezzo){
+        return  pacchettoRepository.findByIdAndPrezzoBetween(id,0,prezzo);
+    }
+
+    public  List<Pacchetto> getByIdAndPrezzoAndDates(long id,double prezzo,LocalDate date1,LocalDate date2){
+        return  pacchettoRepository.findByIdAndPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(id,0,prezzo,date1,date2);
+    }
+    public  List<Pacchetto> getByPrezzoAndDates(double prezzo,LocalDate date1,LocalDate date2){
+        return  pacchettoRepository.findByPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(0,prezzo,date1,date2);
+    }
 }
