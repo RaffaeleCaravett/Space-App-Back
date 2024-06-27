@@ -91,7 +91,5 @@ public class PacchettoController {
         }else{
             throw new BadRequestException("Qualcosa non va nell'elaborazione della richiesta.");
         }
-
-
     }
 }
