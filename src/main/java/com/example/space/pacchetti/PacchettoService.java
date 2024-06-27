@@ -59,7 +59,7 @@ public boolean deleteById(long id){
 }
 
 public Pacchetto putById(long id,PacchettoDTO pacchettoDTO){
-    Pacchetto pacchetto = pacchettoRepository.findById(id).orElseThrow(()-> new BadRequestException("Pacchetto con id + " + id + " non trovato in db."));
+    Pacchetto pacchetto = pacchettoRepository.findById(id).orElseThrow(()-> new BadRequestException("Pacchetto con id  " + id + " non trovato in db."));
     pacchetto.setPosti(pacchettoDTO.posti());
     pacchetto.setPrezzo(pacchettoDTO.prezzo());
     pacchetto.setDa(pacchettoDTO.da());
@@ -67,7 +67,7 @@ public Pacchetto putById(long id,PacchettoDTO pacchettoDTO){
 
     List<Pianeta> pianeti = new ArrayList<>();
     for (Long l : pacchettoDTO.pianeta_id()) {
-        Pianeta pianeta = pianetiRepository.findById(l).orElseThrow(() -> new BadRequestException("Pianeta con id + " + l + " non trovato in db."));
+        Pianeta pianeta = pianetiRepository.findById(l).orElseThrow(() -> new BadRequestException("Pianeta con id " +  l + " non trovato in db."));
         pianeti.add(pianeta);
     }
 
