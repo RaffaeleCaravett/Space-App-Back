@@ -95,8 +95,8 @@ public Page<Pacchetto> findByPrezoBetween(double prezzo1,double prezzo2,Pageable
 }
 
 
-    public boolean findByParameters(double prezzo, int posti, LocalDate da, LocalDate a, long id,Pageable pageable){
-    Page<Pacchetto> pacchetti = pacchettoRepository.findByPrezzoAndPostiAndDaAndAAndPianetas_Id(pageable,prezzo,posti,da,a,id);
+    public boolean findByParameters(double prezzo, int posti, LocalDate da, LocalDate a, long id){
+    List<Pacchetto> pacchetti = pacchettoRepository.findByPrezzoAndPostiAndDaAndAAndPianetas_Id(prezzo,posti,da,a,id);
     if(pacchetti.isEmpty()){
         return true;
     }else{

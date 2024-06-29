@@ -16,7 +16,7 @@ public interface PacchettoRepository extends JpaRepository<Pacchetto,Long> {
 
     Page<Pacchetto> findByDaGreaterThanEqualAndALessThanEqual(Pageable pageable,LocalDate first, LocalDate second);
 
-    Page<Pacchetto> findByPrezzoAndPostiAndDaAndAAndPianetas_Id(Pageable pageable,double prezzo, int posti,LocalDate da, LocalDate a, long pianeta_id);
+    List<Pacchetto> findByPrezzoAndPostiAndDaAndAAndPianetas_Id(double prezzo, int posti,LocalDate da, LocalDate a, long pianeta_id);
 
 Page<Pacchetto> findByIdAndPrezzoBetween(Pageable pageable,long id,double first, double second);
 
