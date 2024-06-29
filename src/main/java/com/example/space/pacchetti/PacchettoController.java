@@ -77,8 +77,8 @@ public class PacchettoController {
 
     @GetMapping("/byParametes")
     public Page<Pacchetto> getByParameters(@RequestParam(defaultValue = "0") long id, @RequestParam(defaultValue = "0") double prezzo, @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")LocalDate date1,
-                                           @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")LocalDate date2){
-        Pageable pageable = PageRequest.of(0,1, Sort.by("id"));
+                                           @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")LocalDate date2,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "5") int size){
+        Pageable pageable = PageRequest.of(page,size, Sort.by("id"));
         if(id!=0&&prezzo==0&& Objects.equals(date1, LocalDate.now()) && Objects.equals(date2, LocalDate.now())){
             return  pacchettoService.getByIdPaginated(id);
         }else if (id==0&&prezzo!=0&& Objects.equals(date1, LocalDate.now()) && Objects.equals(date2, LocalDate.now())){
