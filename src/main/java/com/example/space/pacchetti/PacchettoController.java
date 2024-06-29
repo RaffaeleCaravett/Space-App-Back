@@ -4,6 +4,10 @@ import com.example.space.exceptions.BadRequestException;
 import com.example.space.payloads.entities.PacchettoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -54,14 +58,16 @@ public class PacchettoController {
 
 
     @GetMapping("/prezzo/{prezzoUno}/{prezzoDue}")
-    public List<Pacchetto> getByPrezzoBetween(@PathVariable double prezzoUno , @PathVariable double prezzoDue){
-        return pacchettoService.findByPrezoBetween(prezzoUno,prezzoDue);
+    public Page<Pacchetto> getByPrezzoBetween(@PathVariable double prezzoUno , @PathVariable double prezzoDue){
+        Pageable pageable = PageRequest.of(0,5,Sort.by("id"));
+        return pacchettoService.findByPrezoBetween(prezzoUno,prezzoDue,pageable);
     }
 
     @GetMapping("/date")
-    public List<Pacchetto> getByDateBetween(@RequestParam int annoUno,@RequestParam int meseUno ,@RequestParam int giornoUno,
+    public Page<Pacchetto> getByDateBetween(@RequestParam int annoUno,@RequestParam int meseUno ,@RequestParam int giornoUno,
                                             @RequestParam int annoDue,@RequestParam int meseDue ,@RequestParam int giornoDue){
-        return pacchettoService.findByDates(LocalDate.of(annoUno,meseUno,giornoUno),LocalDate.of(annoDue,meseDue,giornoDue));
+        Pageable pageable = PageRequest.of(0,5,Sort.by("id"));
+        return pacchettoService.findByDates(LocalDate.of(annoUno,meseUno,giornoUno),LocalDate.of(annoDue,meseDue,giornoDue),pageable);
     }
     @GetMapping("/pianeta/{pianetaId}")
     public List<Pacchetto> getByDateBetween(@PathVariable long pianetaId){
@@ -70,30 +76,23 @@ public class PacchettoController {
 
 
     @GetMapping("/byParametes")
-    public List<Pacchetto> getByParameters(@RequestParam(defaultValue = "0") long id, @RequestParam(defaultValue = "0") double prezzo, @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")LocalDate date1,
+    public Page<Pacchetto> getByParameters(@RequestParam(defaultValue = "0") long id, @RequestParam(defaultValue = "0") double prezzo, @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")LocalDate date1,
                                            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")LocalDate date2){
-        List <Pacchetto> pacchettos = new ArrayList<>();
+        Pageable pageable = PageRequest.of(0,1, Sort.by("id"));
         if(id!=0&&prezzo==0&& Objects.equals(date1, LocalDate.now()) && Objects.equals(date2, LocalDate.now())){
-            Pacchetto pacchetto = pacchettoService.getById(id);
-            pacchettos.add(pacchetto);
-            return pacchettos;
+            return  pacchettoService.getByIdPaginated(id);
         }else if (id==0&&prezzo!=0&& Objects.equals(date1, LocalDate.now()) && Objects.equals(date2, LocalDate.now())){
-            pacchettos.addAll(pacchettoService.findByPrezoBetween(0,prezzo));
+            return pacchettoService.findByPrezoBetween(0,prezzo,pageable);
         }else if(id==0&&prezzo==0&& !Objects.equals(date1, LocalDate.now()) && !Objects.equals(date2, LocalDate.now())){
-            pacchettos.addAll(pacchettoService.findByDates(date1,date2));
+            return pacchettoService.findByDates(date1,date2,pageable);
         }else if(id!=0&&prezzo!=0&& Objects.equals(date1, LocalDate.now()) && Objects.equals(date2, LocalDate.now())){
-            pacchettos.addAll(pacchettoService.getByIdAndPrezzo(id,prezzo));
+            return pacchettoService.getByIdAndPrezzo(id,prezzo,pageable);
         }else if(id!=0&&prezzo!=0&& !Objects.equals(date1, LocalDate.now()) && !Objects.equals(date2, LocalDate.now())){
-            pacchettos.addAll(pacchettoService.getByIdAndPrezzoAndDates(id,prezzo,date1,date2));
+            return pacchettoService.getByIdAndPrezzoAndDates(id,prezzo,date1,date2,pageable);
         }else if(id==0&&prezzo!=0&& !Objects.equals(date1, LocalDate.now()) && !Objects.equals(date2, LocalDate.now())){
-            pacchettos.addAll(pacchettoService.getByPrezzoAndDates(prezzo,date1,date2));
+            return pacchettoService.getByPrezzoAndDates(prezzo,date1,date2,pageable);
         }else{
             throw new BadRequestException("Qualcosa non va nell'elaborazione della richiesta.");
-        }
-        if(!pacchettos.isEmpty()){
-            return pacchettos;
-        }else{
-            throw new BadRequestException("Non ci sono pacchetti con i requisiti giusti in database.");
         }
     }
 }

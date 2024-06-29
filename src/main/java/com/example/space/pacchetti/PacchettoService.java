@@ -5,6 +5,10 @@ import com.example.space.payloads.entities.PacchettoDTO;
 import com.example.space.pianeti.Pianeta;
 import com.example.space.pianeti.PianetiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,7 +48,10 @@ public Pacchetto save (PacchettoDTO pacchettoDTO){
 public  Pacchetto getById(long id){
     return  pacchettoRepository.findById(id).orElseThrow(()->new BadRequestException("Pacchetto con id + " + id + " non trovato in db."));
 }
-
+    public Page<Pacchetto> getByIdPaginated(long id){
+        Pageable pageable = PageRequest.of(0,1, Sort.by("id"));
+        return  pacchettoRepository.findById(pageable,id);
+    }
 public List<Pacchetto> getAll (){
     return pacchettoRepository.findAll();
 }
@@ -79,31 +86,31 @@ public List<Pacchetto> findByPianetaId(long id){
     return pacchettoRepository.findByPianetas_Id(id);
 }
 
-public List<Pacchetto> findByDates(LocalDate firstDate, LocalDate secondDate){
-    return pacchettoRepository.findByDaGreaterThanEqualAndALessThanEqual(firstDate,secondDate);
+public Page<Pacchetto> findByDates(LocalDate firstDate, LocalDate secondDate,Pageable pageable){
+    return pacchettoRepository.findByDaGreaterThanEqualAndALessThanEqual(pageable,firstDate,secondDate);
 }
 
-public List<Pacchetto> findByPrezoBetween(double prezzo1,double prezzo2){
-    return pacchettoRepository.findByPrezzoBetween(prezzo1,prezzo2);
+public Page<Pacchetto> findByPrezoBetween(double prezzo1,double prezzo2,Pageable pageable){
+    return pacchettoRepository.findByPrezzoBetween(pageable,prezzo1,prezzo2);
 }
 
 
-    public boolean findByParameters(double prezzo, int posti, LocalDate da, LocalDate a, long id){
-    List<Pacchetto> pacchetti = pacchettoRepository.findByPrezzoAndPostiAndDaAndAAndPianetas_Id(prezzo,posti,da,a,id);
+    public boolean findByParameters(double prezzo, int posti, LocalDate da, LocalDate a, long id,Pageable pageable){
+    Page<Pacchetto> pacchetti = pacchettoRepository.findByPrezzoAndPostiAndDaAndAAndPianetas_Id(pageable,prezzo,posti,da,a,id);
     if(pacchetti.isEmpty()){
         return true;
     }else{
         return false;
     }
     }
-    public  List<Pacchetto> getByIdAndPrezzo(long id,double prezzo){
-        return  pacchettoRepository.findByIdAndPrezzoBetween(id,0,prezzo);
+    public  Page<Pacchetto> getByIdAndPrezzo(long id,double prezzo,Pageable pageable){
+        return  pacchettoRepository.findByIdAndPrezzoBetween(pageable,id,0,prezzo);
     }
 
-    public  List<Pacchetto> getByIdAndPrezzoAndDates(long id,double prezzo,LocalDate date1,LocalDate date2){
-        return  pacchettoRepository.findByIdAndPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(id,0,prezzo,date1,date2);
+    public  Page<Pacchetto> getByIdAndPrezzoAndDates(long id,double prezzo,LocalDate date1,LocalDate date2,Pageable pageable){
+        return  pacchettoRepository.findByIdAndPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(pageable,id,0,prezzo,date1,date2);
     }
-    public  List<Pacchetto> getByPrezzoAndDates(double prezzo,LocalDate date1,LocalDate date2){
-        return  pacchettoRepository.findByPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(0,prezzo,date1,date2);
+    public  Page<Pacchetto> getByPrezzoAndDates(double prezzo,LocalDate date1,LocalDate date2,Pageable pageable){
+        return  pacchettoRepository.findByPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(pageable,0,prezzo,date1,date2);
     }
 }

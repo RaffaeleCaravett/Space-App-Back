@@ -1,5 +1,7 @@
 package com.example.space.pacchetti;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,15 +12,17 @@ import java.util.List;
 public interface PacchettoRepository extends JpaRepository<Pacchetto,Long> {
     List<Pacchetto> findByPianetas_Id(long id);
 
-    List<Pacchetto> findByPrezzoBetween(double first,double second);
+    Page<Pacchetto> findByPrezzoBetween(Pageable pageable,double first,double second);
 
-    List<Pacchetto> findByDaGreaterThanEqualAndALessThanEqual(LocalDate first, LocalDate second);
+    Page<Pacchetto> findByDaGreaterThanEqualAndALessThanEqual(Pageable pageable,LocalDate first, LocalDate second);
 
-    List<Pacchetto> findByPrezzoAndPostiAndDaAndAAndPianetas_Id(double prezzo, int posti,LocalDate da, LocalDate a, long pianeta_id);
+    Page<Pacchetto> findByPrezzoAndPostiAndDaAndAAndPianetas_Id(Pageable pageable,double prezzo, int posti,LocalDate da, LocalDate a, long pianeta_id);
 
-List<Pacchetto> findByIdAndPrezzoBetween(long id,double first, double second);
+Page<Pacchetto> findByIdAndPrezzoBetween(Pageable pageable,long id,double first, double second);
 
-List<Pacchetto> findByIdAndDaGreaterThanEqualAndALessThanEqual(long id , LocalDate da, LocalDate a);
-    List<Pacchetto> findByIdAndPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(long id,double first, double second, LocalDate da, LocalDate a);
-    List<Pacchetto> findByPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(double first, double second, LocalDate da, LocalDate a);
+Page<Pacchetto> findByIdAndDaGreaterThanEqualAndALessThanEqual(Pageable pageable,long id , LocalDate da, LocalDate a);
+    Page<Pacchetto> findByIdAndPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(Pageable pageable,long id,double first, double second, LocalDate da, LocalDate a);
+    Page<Pacchetto> findByPrezzoBetweenAndDaGreaterThanEqualAndALessThanEqual(Pageable pageable,double first, double second, LocalDate da, LocalDate a);
+
+    Page<Pacchetto> findById(Pageable pageable,long id);
 }
