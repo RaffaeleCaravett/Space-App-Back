@@ -37,6 +37,10 @@ public class PacchettoController {
     public List<Pacchetto> getAll(){
         return pacchettoService.getAll();
     }
+    @GetMapping("/paginated")
+    public Page<Pacchetto> getAllPaginated(@RequestParam(defaultValue = "0") int page){
+        return pacchettoService.getAllPaginated(page,10,"id");
+    }
     @GetMapping("/{id}")
     public Pacchetto getById(@PathVariable long id){
         return pacchettoService.getById(id);

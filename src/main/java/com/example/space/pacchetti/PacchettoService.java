@@ -55,6 +55,10 @@ public  Pacchetto getById(long id){
 public List<Pacchetto> getAll (){
     return pacchettoRepository.findAll();
 }
+    public Page<Pacchetto> getAllPaginated (int page, int size, String orderBy){
+    Pageable pageable = PageRequest.of(page,size,Sort.by(orderBy));
+        return pacchettoRepository.findAll(pageable);
+    }
 
 public boolean deleteById(long id){
     try {
