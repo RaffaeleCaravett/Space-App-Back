@@ -29,7 +29,25 @@ public class PrenotazioneService {
     PacchettoRepository pacchettoRepository;
 
     public Prenotazione save(PrenotazioneDTO prenotazioneDTO){
-Prenotazione prenotazione = new Prenotazione();
+        LocalDate localDate = LocalDate.now();
+        long p =0l;
+        Pacchetto pack = new Pacchetto();
+        for(Long pacchetto : prenotazioneDTO.pacchetto_id()){
+            p = pacchetto;
+            pack = pacchettoRepository.findById(pacchetto).get();
+        }
+
+        List<Prenotazione> prenotaziones = findByPacchettoId(p);
+
+        if(localDate.isAfter(pack.getDa())) {
+        throw new BadRequestException("Non puoi prenotare per una data già passata.");
+        }
+
+        if(prenotaziones.size()>=pack.getPosti()){
+            throw new BadRequestException("Questo pacchetto ha già raggiunto il limite massimo di prenotazioni disponibili. ");
+        }
+
+            Prenotazione prenotazione = new Prenotazione();
         User user = userRepository.findById(prenotazioneDTO.user_id()).orElseThrow(()->new BadRequestException("User con id " + prenotazioneDTO.user_id() + " non trovato in db."));
 prenotazione.setUser(user);
         List<Pacchetto> pacchettos= new ArrayList<>();
@@ -40,6 +58,7 @@ for(Long l : prenotazioneDTO.pacchetto_id()){
 prenotazione.setPacchettos(pacchettos);
 prenotazione.setCreated(LocalDate.now());
 return prenotazioneRepository.save(prenotazione);
+
     }
 
 
