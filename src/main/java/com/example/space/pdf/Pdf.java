@@ -19,5 +19,6 @@ public class Pdf {
 @ManyToOne
     @JoinColumn(name = "user_id")
 private User user;
-private ByteArrayOutputStream pdf;
+    @Lob
+private byte[] pdf;
 }

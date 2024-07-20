@@ -56,7 +56,7 @@ public class PdfController {
             document.close();
             Pdf pdf = new Pdf();
             pdf.setUser(userRepository.findById(prenotazioneDTO.user_id()).orElseThrow(()->new BadRequestException("User con id " + prenotazioneDTO.user_id() + " non trovato in db.")));
-            pdf.setPdf(output);
+            pdf.setPdf(output.toByteArray());
             return pdf;
         }catch (Exception e){
             throw new BadRequestException(e.getMessage());
