@@ -6,12 +6,15 @@ import com.example.space.payloads.entities.PrenotazioneDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.apache.pdfbox.pdmodel.font.*;
-import org.apache.pdfbox.pdmodel.font.COURIER;
+
+import java.io.ByteArrayOutputStream;
 
 @RestController
 @RequestMapping("/pdf")
@@ -19,25 +22,36 @@ public class PdfController {
 
     @PostMapping("")
     @PreAuthorize("hasAuthority('Admin')")
-    public void generatePdf(@RequestBody @Validated PrenotazioneDTO prenotazioneDTO, BindingResult bindingResult){
+    public ByteArrayOutputStream generatePdf(@RequestBody @Validated PrenotazioneDTO prenotazioneDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
         try{
-            PDDocument document = new PDDocument();
+
+            PDFont font =   new PDType1Font(Standard14Fonts.FontName.COURIER);
+            PDPageContentStream contentStream;
+            ByteArrayOutputStream output =new ByteArrayOutputStream();
+            PDDocument document =new PDDocument();
             PDPage page = new PDPage();
             document.addPage(page);
-
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.COURIER), 12);
+            contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
-            contentStream.showText("Hello World");
+            contentStream.setFont(font, 12);
+            contentStream.newLineAtOffset(10, 770);
+            contentStream.showText("Amount: $1.00");
             contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 20);
+            contentStream.newLineAtOffset(200, 880);
+            contentStream.showText("Sequence Number: 123456789");
+            contentStream.endText();
+
             contentStream.close();
 
-            document.save("pdfBoxHelloWorld.pdf");
+            document.save(output);
             document.close();
+            return output;
         }catch (Exception e){
             throw new BadRequestException(e.getMessage());
         }
