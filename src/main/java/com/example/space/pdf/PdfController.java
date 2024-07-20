@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 public class PdfController {
 
     @PostMapping("")
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAuthority('USER')")
     public ByteArrayOutputStream generatePdf(@RequestBody @Validated PrenotazioneDTO prenotazioneDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
