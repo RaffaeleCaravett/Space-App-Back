@@ -50,7 +50,7 @@ PdfRepository pdfRepository;
 
             contentStream = new PDPageContentStream(document, page);
 
-            contentStream.drawImage( pdImage, 10, 750, 100, 100 );
+            contentStream.drawImage( pdImage, 10, 670, 100, 100 );
 
             contentStream.beginText();
             contentStream.setFont(font, 30);
@@ -117,19 +117,19 @@ PdfRepository pdfRepository;
 
             contentStream.beginText();
             contentStream.setFont(fontBold, 16);
-            contentStream.newLineAtOffset(290, 150);
+            contentStream.newLineAtOffset(290, 200);
             contentStream.showText(
                     "P.P.V. Data, luogo e firma."
             );
             contentStream.endText();
 
 
-            contentStream.moveTo(290, 100);
-            contentStream.lineTo(450, 100);
+            contentStream.moveTo(300, 140);
+            contentStream.lineTo(540, 140);
             contentStream.stroke();
 
             contentStream.beginText();
-            contentStream.newLineAtOffset(150, 50);
+            contentStream.newLineAtOffset(150, 55);
             contentStream.setFont(fontBold, 30);
             contentStream.showText(
                     "SpaceAgency A.p.s."
@@ -167,7 +167,7 @@ PdfRepository pdfRepository;
             document.save(output);
             document.close();
 
-/*
+
             Pdf pdf = new Pdf();
             pdf.setUser(user);
             pdf.setPacchetto(pacchetto);
@@ -178,7 +178,7 @@ PdfRepository pdfRepository;
             }
 
             pdfRepository.save(pdf);
-        */
+
             return output.toByteArray();
         }catch (Exception e){
             throw new BadRequestException(e.getMessage());
