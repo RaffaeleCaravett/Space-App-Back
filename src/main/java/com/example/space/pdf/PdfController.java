@@ -26,6 +26,9 @@ public class PdfController {
 UserRepository userRepository;
 @Autowired
     PacchettoRepository pacchettoRepository;
+
+@Autowired
+PdfRepository pdfRepository;
     @PostMapping("")
     @PreAuthorize("hasAuthority('USER')")
     public byte[] generatePdf(@RequestBody @Validated PrenotazioneDTO prenotazioneDTO, BindingResult bindingResult){
@@ -51,7 +54,9 @@ UserRepository userRepository;
             pdf.setUser(user);
             pdf.setPacchetto(pacchetto);
 
-            if()
+            if(pdfRepository.findByUser_IdAndPacchetto_Id(user.getId(),pacchetto.getId()).isPresent()){
+                throw new BadRequestException("Hai già scaricato il pdf per questa tua prenotazione.");
+            }
 
             contentStream.showText(
                     "Informazioni sulla persona : " + " " +
