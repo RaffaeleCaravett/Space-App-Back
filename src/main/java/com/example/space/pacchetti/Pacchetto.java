@@ -1,5 +1,6 @@
 package com.example.space.pacchetti;
 
+import com.example.space.pdf.Pdf;
 import com.example.space.pianeti.Pianeta;
 import com.example.space.prenotazioni.Prenotazione;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,5 +36,7 @@ public class Pacchetto {
     joinColumns = @JoinColumn(name = "pacchetto_id"),
     inverseJoinColumns = @JoinColumn(name = "pianeta_id"))
     private List<Pianeta> pianetas;
-
+    @OneToMany(mappedBy = "pacchetto")
+    @JsonIgnore
+    private List<Pdf> pdfList;
 }
