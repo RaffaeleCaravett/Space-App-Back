@@ -1,8 +1,11 @@
 package com.example.space.pdf;
 
 import com.example.space.exceptions.BadRequestException;
+import com.example.space.pacchetti.Pacchetto;
+import com.example.space.pacchetti.PacchettoRepository;
 import com.example.space.payloads.entities.PrenotazioneDTO;
 
+import com.example.space.user.User;
 import com.example.space.user.UserRepository;
 import jakarta.transaction.Transactional;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -20,8 +23,10 @@ import java.io.ByteArrayOutputStream;
 @RestController
 @RequestMapping("/pdf")
 public class PdfController {
-
-
+@Autowired
+UserRepository userRepository;
+@Autowired
+    PacchettoRepository pacchettoRepository;
     @PostMapping("")
     @PreAuthorize("hasAuthority('USER')")
     public byte[] generatePdf(@RequestBody @Validated PrenotazioneDTO prenotazioneDTO, BindingResult bindingResult){
@@ -40,7 +45,19 @@ public class PdfController {
             contentStream.beginText();
             contentStream.setFont(font, 12);
             contentStream.newLineAtOffset(10, 770);
-            contentStream.showText("Amount: $1.00");
+            User user = userRepository.findById(prenotazioneDTO.user_id()).orElseThrow(()->new BadRequestException("User con id "+ prenotazioneDTO.user_id() + " non trovato."));
+            Pacchetto pacchetto = pacchettoRepository.findById(prenotazioneDTO.pacchetto_id().get(0)).orElseThrow(()->new BadRequestException("Pacchetto con id "+ prenotazioneDTO.pacchetto_id().get(0) + " non trovato."));
+            contentStream.showText(
+                    "Informazioni sulla persona : " +
+                     user.getNome() + " " + user.getCognome() +
+                     user.getEmail() +
+                     "Anni : " + user.getEta() +
+                            "Dove andrai? " +
+                            "Pianeta : " + pacchetto.getPianetas().get(0).getNome() +
+                            "Galassia : " + pacchetto.getPianetas().get(0).getGalassia() +
+                            "Quanto hai speso per questa prenotazione : " + pacchetto.getPrezzo() +";"
+            );
+
             contentStream.endText();
 
             contentStream.beginText();
