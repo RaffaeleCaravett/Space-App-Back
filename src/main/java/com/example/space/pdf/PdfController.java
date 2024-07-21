@@ -44,19 +44,22 @@ PdfRepository pdfRepository;
             PDPage page = new PDPage();
             document.addPage(page);
             contentStream = new PDPageContentStream(document, page);
+
+
             contentStream.beginText();
-            contentStream.setFont(font, 25);
-            contentStream.newLineAtOffset(10, 700);
+            contentStream.setFont(font, 30);
+            contentStream.newLineAtOffset(150, 750);
+            contentStream.showText(
+                    "La tua prenotazione"
+            );
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 14);
+            contentStream.newLineAtOffset(50, 634);
             User user = userRepository.findById(prenotazioneDTO.user_id()).orElseThrow(()->new BadRequestException("User con id "+ prenotazioneDTO.user_id() + " non trovato."));
             Pacchetto pacchetto = pacchettoRepository.findById(prenotazioneDTO.pacchetto_id().get(0)).orElseThrow(()->new BadRequestException("Pacchetto con id "+ prenotazioneDTO.pacchetto_id().get(0) + " non trovato."));
 
-            Pdf pdf = new Pdf();
-            pdf.setUser(user);
-            pdf.setPacchetto(pacchetto);
-
-            if(pdfRepository.findByUser_IdAndPacchetto_Id(user.getId(),pacchetto.getId()).isPresent()){
-                throw new BadRequestException("Hai già scaricato il pdf per questa tua prenotazione.");
-            }
 
             contentStream.showText(
                     "Informazioni sulla persona : " + " " +
@@ -66,28 +69,43 @@ PdfRepository pdfRepository;
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 20);
-            contentStream.newLineAtOffset(10, 678);
+            contentStream.setFont(font, 14);
+            contentStream.newLineAtOffset(300, 618);
             contentStream.showText(
-                    "Anni : " + user.getEta() + " "
+                     user.getEta() + " anni."
             );
             contentStream.endText();
 
             contentStream.beginText();
             contentStream.setFont(font, 20);
-            contentStream.newLineAtOffset(10, 656);
+            contentStream.newLineAtOffset(50, 590);
             contentStream.showText(
-                    "Dove andrai? " + " " +
-                            "Pianeta : " + pacchetto.getPianetas().get(0).getNome() + " " +
+                    "Dove andrai? " + " "
+            );
+            contentStream.endText();
+
+
+            contentStream.beginText();
+            contentStream.setFont(font, 20);
+            contentStream.newLineAtOffset(250, 590);
+            contentStream.showText(
+                    "Pianeta : " + pacchetto.getPianetas().get(0).getNome() + " "
+            );
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 20);
+            contentStream.newLineAtOffset(250, 560);
+            contentStream.showText(
                             "Galassia : " + pacchetto.getPianetas().get(0).getGalassia() + " "
             );
             contentStream.endText();
 
             contentStream.beginText();
             contentStream.setFont(font, 20);
-            contentStream.newLineAtOffset(10, 634);
+            contentStream.newLineAtOffset(50, 524);
             contentStream.showText(
-                    "Quanto hai speso per questa prenotazione : " + pacchetto.getPrezzo() +";"
+                    "Hai speso " + pacchetto.getPrezzo() + " per questa prenotazione."
             );
             contentStream.endText();
 
@@ -95,8 +113,18 @@ PdfRepository pdfRepository;
 
             document.save(output);
             document.close();
+/*
+            Pdf pdf = new Pdf();
+            pdf.setUser(user);
+            pdf.setPacchetto(pacchetto);
 
 
+          if(pdfRepository.findByUser_IdAndPacchetto_Id(user.getId(),pacchetto.getId()).isPresent()){
+                throw  new BadRequestException("Hai già scaricato il pdf per questa tua prenotazione.");
+            }
+
+            pdfRepository.save(pdf);
+        */
             return output.toByteArray();
         }catch (Exception e){
             throw new BadRequestException(e.getMessage());
