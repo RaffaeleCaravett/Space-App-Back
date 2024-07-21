@@ -4,6 +4,7 @@ import com.example.space.exceptions.BadRequestException;
 import com.example.space.payloads.entities.PrenotazioneDTO;
 
 import com.example.space.user.UserRepository;
+import jakarta.transaction.Transactional;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -20,12 +21,10 @@ import java.io.ByteArrayOutputStream;
 @RequestMapping("/pdf")
 public class PdfController {
 
-    @Autowired
-    UserRepository userRepository;
 
     @PostMapping("")
     @PreAuthorize("hasAuthority('USER')")
-    public Pdf generatePdf(@RequestBody @Validated PrenotazioneDTO prenotazioneDTO, BindingResult bindingResult){
+    public byte[] generatePdf(@RequestBody @Validated PrenotazioneDTO prenotazioneDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
@@ -54,10 +53,9 @@ public class PdfController {
 
             document.save(output);
             document.close();
-            Pdf pdf = new Pdf();
-            pdf.setUser(userRepository.findById(prenotazioneDTO.user_id()).orElseThrow(()->new BadRequestException("User con id " + prenotazioneDTO.user_id() + " non trovato in db.")));
-            pdf.setPdf(output.toByteArray());
-            return pdf;
+
+
+            return output.toByteArray();
         }catch (Exception e){
             throw new BadRequestException(e.getMessage());
         }
