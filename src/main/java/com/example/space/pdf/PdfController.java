@@ -7,7 +7,6 @@ import com.example.space.payloads.entities.PrenotazioneDTO;
 
 import com.example.space.user.User;
 import com.example.space.user.UserRepository;
-import jakarta.transaction.Transactional;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -43,27 +42,41 @@ UserRepository userRepository;
             document.addPage(page);
             contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
-            contentStream.setFont(font, 12);
-            contentStream.newLineAtOffset(10, 770);
+            contentStream.setFont(font, 25);
+            contentStream.newLineAtOffset(10, 700);
             User user = userRepository.findById(prenotazioneDTO.user_id()).orElseThrow(()->new BadRequestException("User con id "+ prenotazioneDTO.user_id() + " non trovato."));
             Pacchetto pacchetto = pacchettoRepository.findById(prenotazioneDTO.pacchetto_id().get(0)).orElseThrow(()->new BadRequestException("Pacchetto con id "+ prenotazioneDTO.pacchetto_id().get(0) + " non trovato."));
             contentStream.showText(
-                    "Informazioni sulla persona : " +
-                     user.getNome() + " " + user.getCognome() +
-                     user.getEmail() +
-                     "Anni : " + user.getEta() +
-                            "Dove andrai? " +
-                            "Pianeta : " + pacchetto.getPianetas().get(0).getNome() +
-                            "Galassia : " + pacchetto.getPianetas().get(0).getGalassia() +
-                            "Quanto hai speso per questa prenotazione : " + pacchetto.getPrezzo() +";"
+                    "Informazioni sulla persona : " + " " +
+                     user.getNome() + " " + user.getCognome() + " " +
+                     user.getEmail() + " "
             );
-
             contentStream.endText();
 
             contentStream.beginText();
             contentStream.setFont(font, 20);
-            contentStream.newLineAtOffset(200, 880);
-            contentStream.showText("Sequence Number: 123456789");
+            contentStream.newLineAtOffset(10, 678);
+            contentStream.showText(
+                    "Anni : " + user.getEta() + " "
+            );
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 20);
+            contentStream.newLineAtOffset(10, 656);
+            contentStream.showText(
+                    "Dove andrai? " + " " +
+                            "Pianeta : " + pacchetto.getPianetas().get(0).getNome() + " " +
+                            "Galassia : " + pacchetto.getPianetas().get(0).getGalassia() + " "
+            );
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 20);
+            contentStream.newLineAtOffset(10, 634);
+            contentStream.showText(
+                    "Quanto hai speso per questa prenotazione : " + pacchetto.getPrezzo() +";"
+            );
             contentStream.endText();
 
             contentStream.close();
