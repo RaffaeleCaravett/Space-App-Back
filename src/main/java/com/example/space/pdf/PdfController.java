@@ -10,6 +10,7 @@ import com.example.space.user.UserRepository;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -38,13 +39,18 @@ PdfRepository pdfRepository;
         try{
 
             PDFont font =   new PDType1Font(Standard14Fonts.FontName.COURIER);
+            PDFont fontBold =   new PDType1Font(Standard14Fonts.FontName.COURIER_BOLD);
             PDPageContentStream contentStream;
             ByteArrayOutputStream output =new ByteArrayOutputStream();
             PDDocument document =new PDDocument();
             PDPage page = new PDPage();
             document.addPage(page);
+
+            PDImageXObject pdImage = PDImageXObject.createFromFile("C:/Users/Utente/Pictures/451987055_3624459951153481_7494526139017243318_n.jpg", document);
+
             contentStream = new PDPageContentStream(document, page);
 
+            contentStream.drawImage( pdImage, 10, 750, 100, 100 );
 
             contentStream.beginText();
             contentStream.setFont(font, 30);
@@ -77,7 +83,7 @@ PdfRepository pdfRepository;
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 20);
+            contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(50, 590);
             contentStream.showText(
                     "Dove andrai? " + " "
@@ -86,7 +92,7 @@ PdfRepository pdfRepository;
 
 
             contentStream.beginText();
-            contentStream.setFont(font, 20);
+            contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(250, 590);
             contentStream.showText(
                     "Pianeta : " + pacchetto.getPianetas().get(0).getNome() + " "
@@ -94,7 +100,7 @@ PdfRepository pdfRepository;
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 20);
+            contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(250, 560);
             contentStream.showText(
                             "Galassia : " + pacchetto.getPianetas().get(0).getGalassia() + " "
@@ -102,17 +108,65 @@ PdfRepository pdfRepository;
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 20);
+            contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(50, 524);
             contentStream.showText(
                     "Hai speso " + pacchetto.getPrezzo() + " per questa prenotazione."
             );
             contentStream.endText();
 
+            contentStream.beginText();
+            contentStream.setFont(fontBold, 16);
+            contentStream.newLineAtOffset(290, 150);
+            contentStream.showText(
+                    "P.P.V. Data, luogo e firma."
+            );
+            contentStream.endText();
+
+
+            contentStream.moveTo(290, 100);
+            contentStream.lineTo(450, 100);
+            contentStream.stroke();
+
+            contentStream.beginText();
+            contentStream.newLineAtOffset(150, 50);
+            contentStream.setFont(fontBold, 30);
+            contentStream.showText(
+                    "SpaceAgency A.p.s."
+            );
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 30);
+            contentStream.setFont(font, 8);
+            contentStream.newLineAtOffset(200, 36);
+            contentStream.showText(
+                    "Tutti i diritti sono riservati"
+            );
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.newLineAtOffset(200, 28);
+            contentStream.showText(
+                    "L'attuale documento non rappresenta "
+            );
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.newLineAtOffset(200, 20);
+            contentStream.showText(
+                    "Una reale prenotazione."
+            );
+            contentStream.endText();
+
             contentStream.close();
+
 
             document.save(output);
             document.close();
+
 /*
             Pdf pdf = new Pdf();
             pdf.setUser(user);
