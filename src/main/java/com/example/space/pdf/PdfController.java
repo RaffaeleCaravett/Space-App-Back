@@ -46,6 +46,13 @@ UserRepository userRepository;
             contentStream.newLineAtOffset(10, 700);
             User user = userRepository.findById(prenotazioneDTO.user_id()).orElseThrow(()->new BadRequestException("User con id "+ prenotazioneDTO.user_id() + " non trovato."));
             Pacchetto pacchetto = pacchettoRepository.findById(prenotazioneDTO.pacchetto_id().get(0)).orElseThrow(()->new BadRequestException("Pacchetto con id "+ prenotazioneDTO.pacchetto_id().get(0) + " non trovato."));
+
+            Pdf pdf = new Pdf();
+            pdf.setUser(user);
+            pdf.setPacchetto(pacchetto);
+
+            if()
+
             contentStream.showText(
                     "Informazioni sulla persona : " + " " +
                      user.getNome() + " " + user.getCognome() + " " +
